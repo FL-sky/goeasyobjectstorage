@@ -1,0 +1,20 @@
+sudo apt-get install rabbitmq-server
+
+sudo rabbitmq-plugins enable rabbitmq_management
+
+wget localhost:15672/cli/rabbitmqadmin
+
+python3 rabbitmqadmin declare exchange name=apiServers type=fanout
+
+python3 rabbitmqadmin declare exchange name=dataServers type=fanout
+
+sudo rabbitmqctl add_user test test
+
+sudo rabbitmqctl set_permissions -p / test ".*" ".*" ".*"
+
+...
+sudo apt-get install elasticsearch
+
+sudo /usr/share/elasticsearch/bin/elasticsearch > /dev/null &
+
+curl localhost:9200/metadata -XPUT -d'{"mappings":{"objects":{"properties":{"name":{"type":"string","index":"not_analyzed"},"version":{"type":"integer"},"size":{"type":"integer"},"hash":{"type":"string"}}}}}'
